@@ -1,41 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-  <title>Player Registration</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>कैश प्रीमियर लीग - प्लेयर रजिस्ट्रेशन</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #1e3d59;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        input[type="text"], input[type="tel"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #1e3d59;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background-color: #17b978;
+        }
+        .payment-section {
+            margin-top: 25px;
+            padding: 15px;
+            background: #e8f4f8;
+            border-left: 5px solid #17b978;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .qr-placeholder {
+            margin: 15px 0;
+            padding: 20px;
+            background: #ddd;
+            display: inline-block;
+            font-weight: bold;
+            color: #555;
+            border: 2px dashed #666;
+        }
+    </style>
 </head>
 <body>
-  <h2>Player Registration</h2>
-  <form>
-    <label for="fullName">Full Name</label>
-    <input type="text" id="fullName" required>
 
-    <label for="address">Address</label>
-    <input type="text" id="address" required>
+<div class="container">
+    <h2>🏏 कैश प्रीमियर लीग रजिस्ट्रेशन</h2>
+    
+    <form id="registrationForm" onsubmit="handleRegistration(event)">
+        <div class="form-group">
+            <label for="fullName">पूरा नाम:</label>
+            <input type="text" id="fullName" required placeholder="अपना नाम लिखें">
+        </div>
 
-    <label for="phone">Phone Number</label>
-    <input type="tel" id="phone" required>
+        <div class="form-group">
+            <label for="address">पता (Address):</label>
+            <input type="text" id="address" required placeholder="अपना पता लिखें">
+        </div>
 
-    <label for="age">Age</label>
-    <input type="number" id="age" required>
+        <div class="form-group">
+            <label for="phone">फ़ोन नंबर:</label>
+            <input type="tel" id="phone" pattern="[0-9]{10}" required placeholder="10 अंकों का मोबाइल नंबर">
+        </div>
 
-    <label for="playerType">Player Type</label>
-    <select id="playerType">
-      <option>Batter</option>
-      <option>Bowler</option>
-      <option>All-Rounder</option>
-      <option>Wicket Keeper</option>
-    </select>
+        <div class="form-group">
+            <label for="skill">क्रिकेट स्किल (Category):</label>
+            <select id="skill" required>
+                <option value="">अपनी कैटेगरी चुनें</option>
+                <option value="Batsman">बल्लेबाज (Batsman)</option>
+                <option value="Bowler">गेंदबाज (Bowler)</option>
+                <option value="Wicketkeeper">विकेटकीपर (Wicketkeeper)</option>
+                <option value="All-Rounder">ऑलराउंडर (All-Rounder)</option>
+            </select>
+        </div>
 
-    <label for="matches">Matches Played</label>
-    <input type="number" id="matches">
+        <div class="payment-section">
+            <h3>💳 रजिस्ट्रेशन फीस भुगतान</h3>
+            <p>नीचे दिए गए स्कैनर को अपने PhonePe, Google Pay या Paytm से स्कैन करके फीस जमा करें।</p>
+            
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=upi://pay?pa=YOUR_UPI_ID@okaxis&pn=CashPremierLeague&am=100&cu=INR" alt="UPI QR Code">
+            <p style="font-size: 12px; color: #666; margin-top: 5px;">[यहाँ आपका QR Code लोड होगा]</p>
+            
+            <div class="form-group" style="text-align: left; margin-top: 15px;">
+                <label for="txnId">पेमेंट ट्रांजेक्शन ID (Txn ID):</label>
+                <input type="text" id="txnId" required placeholder="भुगतान के बाद मिली ID यहाँ डालें">
+            </div>
+        </div>
 
-    <label for="runs">Runs Scored</label>
-    <input type="number" id="runs">
+        <button type="submit" style="margin-top: 20px;">फॉर्म सबमिट करें और रजिस्टर करें</button>
+    </form>
+</div>
 
-    <label for="wickets">Wickets Taken</label>
-    <input type="number" id="wickets">
-  </form>
+<script>
+function handleRegistration(event) {
+    event.preventDefault();
+    
+    // फॉर्म डेटा कलेक्ट करना
+    const name = document.getElementById('fullName').value;
+    const skill = document.getElementById('skill').value;
+    const txnId = document.getElementById('txnId').value;
+
+    // डेटा को ऑक्शन लिस्ट या डेटाबेस में भेजने के लिए मैसेज
+    alert(`बधाई हो ${name}! आपका रजिस्ट्रेशन ${skill} के रूप में सफलतापूर्वक हो गया है। आपकी पेमेंट ट्रांजेक्शन ID: ${txnId} है। ऑक्शन के लिए आपकी प्रोफाइल सेव कर ली गई है।`);
+    
+    document.getElementById('registrationForm').reset();
+}
+</script>
+
 </body>
 </html>
 
